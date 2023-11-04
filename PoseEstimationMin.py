@@ -13,6 +13,10 @@ pTime = 0
 
 while True:
     success, img = cap.read()
+    
+    if not success:
+        break
+
     imgRGB = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     results = pose.process(imgRGB)
     # print(results.pose_landmarks)
@@ -22,17 +26,20 @@ while True:
                               mpPose.POSE_CONNECTIONS)
         for id, lm in enumerate(results.pose_landmarks.landmark):
             h, w, c = img.shape
-            print(id, lm)
+            print('landmarck id:',id)
+            print(lm)
             # owe get the landmark position in pixels
             cx, cy = int(lm.x*w), int(lm.y*h)
             cv2.circle(img, (cx, cy), 5, (255, 0, 0), cv2.FILLED)
 
-    cTime = time.time()
-    fps = 1/(cTime-pTime)
-    pTime = cTime
+    # Draw the fps
+    # cTime = time.time()
+    # fps = 1/(cTime-pTime)
+    # pTime = cTime
 
-    cv2.putText(img, str(int(fps)), (70, 50),
-                cv2.FONT_HERSHEY_PLAIN, 3, (255, 0, 0), 3)
+    # cv2.putText(img, str(int(fps)), (70, 50),
+    #             cv2.FONT_HERSHEY_PLAIN, 3, (255, 0, 0), 3)
+    
+
     cv2.imshow("Image", img)
-
-    cv2.waitKey(1)  # wait a milisecond
+    cv2.waitKey(100)  # wait a milisecond
